@@ -99,8 +99,11 @@ void SerialProtocolHandle::ReceiveCargo(void)
 
                 memcpy(rxMessageCfrm, tempRx, bytesToRead);
                 rxMessageLen = bytesToRead;
+                // if (ifNewMessage)
+                    // std::cout << "Unprocessed Message Detected!" << std::endl;
                 ifNewMessage = 1;
-
+                DataLogReceiveManager();
+                
                 // std::cout<<"Cargo Received!"<<std::endl;
                 // std::cout<<"Message is :" << std::endl;
                 // for (uint8_t i = 0; i <= bytesToRead - 1; i++)
@@ -337,7 +340,6 @@ void SerialProtocolHandle::DataLogTransmitManager(void)
 
 void SerialProtocolHandle::DataLogManager(void)
 {
-    DataLogReceiveManager();
     DataLogTransmitManager();
 }
 

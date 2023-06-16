@@ -4,7 +4,7 @@ void USB_RxCargo(SerialProtocolHandle* hserial)
 {
     while(1)
     {
-        hserial->ReceiveCargo();
+          hserial->ReceiveCargo();
     }
 }
 
@@ -39,7 +39,6 @@ int main(int argc, char** argv)
     SerialProtocolHandle hSerial(argv[1], atoi(argv[2]), argv[3]);
     std::thread Thread_USB_RxCargo(USB_RxCargo, &hSerial);
     std::thread Thread_KeyboardInput(Keyboard, &hSerial);
-
     hSerial.curDatalogFilename = argv[3];
     while(1)
     {

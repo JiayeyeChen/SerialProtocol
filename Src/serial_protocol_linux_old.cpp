@@ -117,13 +117,7 @@ void SerialProtocolHandle::ReceiveCargo(void)
             }
             else
             {
-                msgDetectStage = 0;
-                std::cout << "Invalid Serial Cargo: ";
-                for (int i = 0; i <= bytesToRead + 2; i++)
-                {
-                    std::cout << std::hex << (int)tempRx[i] << " ";
-                }
-                std::cout << std::endl;
+                std::cout << "Invalid Cargo!" << std::endl;
             }
 
             // std::cout << "CRC real result: " << std::hex << (unsigned int)crcFromMFEC << std::endl;
@@ -170,14 +164,6 @@ void SerialProtocolHandle::StartDataLogActive(std::string filename)
     fileStream << "Index," << "Time (ms),";
 }
 
-void SerialProtocolHandle::StartDataLogPassive(std::string filename)
-{
-    std::cout << "Datalog started passively!" << std::endl;
-    curDatalogTask = DATALOG_TASK_START_PASSIVE;
-    fileStream.open(filename.data());
-    fileStream << "Index," << "Time (mssss),";
-}
-
 bool SerialProtocolHandle::ifNewMsgIsThisString(std::string str)
 {
     if(ifNewMessage)
@@ -197,14 +183,16 @@ void SerialProtocolHandle::DataLogReceiveManager(void)
 {
     if (ifNewMsgIsThisString("Datalog start"))
     {
-        StartDataLogPassive(curDatalogFilename);
+        std::cout << "Datalog started passively!" << std::endl;
+        curDatalogTask = DATALOG_TASK_START_PASSIVE;
+        fileStream.open(curDatalogFilename);
+        fileStream << "Index," << "Time (ms),";
         return;
     }
     if (ifNewMsgIsThisString("Datalog end"))
     {
         std::cout << "Datalog ending passively!" << std::endl;
         curDatalogTask = DATALOG_TASK_END_PASSIVE;
-        fileStream.close();
         return;
     }
  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -274,12 +262,12 @@ void SerialProtocolHandle::DataLogReceiveManager(void)
     }
     else if (curDatalogTask == DATALOG_TASK_DATALOG)
     {
-        // if(ifNewMsgIsThisString("Datalog end"))
-        // {
-        //     std::cout<<"Current datalog finished!"<<std::endl;
-        //     curDatalogTask == DATALOG_TASK_END_PASSIVE;
-        //     fileStream.close();
-        // }
+        if(ifNewMsgIsThisString("Datalog end"))
+        {
+            std::cout<<"Current datalog finished!"<<std::endl;
+            curDatalogTask == DATALOG_TASK_END_PASSIVE;
+            fileStream.close();
+        }
 
         if (ifNewMessage)
         {
@@ -339,11 +327,15 @@ void SerialProtocolHandle::DataLogTransmitManager(void)
     }
     else if (curDatalogTask == DATALOG_TASK_END_PASSIVE)
     {
-        SendText("Roger that");//SendText("Datalog end request received!");
+        SendText("Datalog end request received!");
     }
     else if (curDatalogTask == DATALOG_TASK_FREE)
     {
         SendText("Datalog free");
+    }
+    else if (curDatalogTask == DATALOG_TASK_OFF)
+    {
+
     }
 }
 
@@ -358,7 +350,12 @@ void SerialProtocolHandle::EndDataLogActive(void)
     fileStream.close();
 }
 
-void SerialProtocolHandle::TurnOffDataLog(void)
+void SerialProtocolHandle::TurnOnDatalog(void)
+{
+    curDatalogTask = DATALOG_TASK_FREE;
+}
+
+void SerialProtocolHandle::TurnOffDatalog(void)
 {
     curDatalogTask = DATALOG_TASK_OFF;
 }

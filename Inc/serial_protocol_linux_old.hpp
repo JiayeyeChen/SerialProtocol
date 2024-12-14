@@ -1,11 +1,12 @@
-#ifndef __SERIAL_PROTOCOL_LINUX_HPP
-#define __SERIAL_PROTOCOL_LINUX_HPP
+#ifndef __SERIAL_PROTOCOL_LINUX
+#define __SERIAL_PROTOCOL_LINUX
 
 #include <boost/asio.hpp>
 #include "crc16_modbus.hpp"
 #include <iostream>
 #include <string>
 #include <fstream>
+#include "main.hpp"
 #include <vector>
 
 enum DataLogTask
@@ -50,10 +51,10 @@ class SerialProtocolHandle
             std::ofstream fileStream;
             std::string curDatalogFilename;
             void StartDataLogActive(std::string filename);
-            void StartDataLogPassive(std::string filename);
             void EndDataLogActive(void);
-            void TurnOffDataLog(void);
             bool ifNewMsgIsThisString(std::string str);
+            void TurnOnDatalog(void);
+            void TurnOffDatalog(void);
             /*Received MCU Values*/
             uint32_t systemTime, index;
     private:

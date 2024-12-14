@@ -5,6 +5,7 @@ void USB_RxCargo(SerialProtocolHandle* hserial)
     while(1)
     {
           hserial->ReceiveCargo();
+          hserial->DataLogTransmitManager();
     }
 }
 
@@ -15,7 +16,15 @@ void Keyboard(SerialProtocolHandle* hserial)
         std::string inputStr;
         std::cin >> inputStr;
         
-        if (inputStr == "datalog-start")
+        if (inputStr == "datalog-on")
+        {
+
+        }
+        else if (inputStr == "datalog-off")
+        {
+            hserial->TurnOffDataLog();
+        }
+        else if (inputStr == "datalog-start")
         {
             std::cout << "User input: Datalog start!"<<std::endl;
             hserial->StartDataLogActive(hserial->curDatalogFilename);
@@ -25,11 +34,17 @@ void Keyboard(SerialProtocolHandle* hserial)
             std::cout << "User input: Datalog end!"<<std::endl;
             hserial->EndDataLogActive();
         }
-        else if (!inputStr.compare(0,4,"file")) //Velocity control
+        else if (!inputStr.compare(0,4,"file"))
         {
             hserial->curDatalogFilename.clear();
             std::cin >> hserial->curDatalogFilename;
             std::cout << "File name is: " << hserial->curDatalogFilename << std::endl;
+        }
+        else if (!inputStr.compare(0,3,"say"))
+        {
+            std::string words;
+            std::cin >> words;
+            hserial->SendText(words);
         }
     }
 }
@@ -42,8 +57,8 @@ int main(int argc, char** argv)
     hSerial.curDatalogFilename = argv[3];
     while(1)
     {
-        hSerial.DataLogManager();
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        // hSerial.DataLogManager();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
     return 0;
 }

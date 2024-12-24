@@ -322,6 +322,7 @@ void SerialProtocolHandle::DataLogTransmitManager(void)
     }
     else if (curDatalogTask == DATALOG_TASK_RECEIVE_DATA_SLOT_LEN)
     {
+        std::cout << "sending data slot length"<< std::endl;
         SendText("Data slot length received!");
     }
     else if (curDatalogTask == DATALOG_TASK_RECEIVE_DATA_SLOT_MSG)

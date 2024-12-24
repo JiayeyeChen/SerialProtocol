@@ -7,6 +7,6 @@
 #include "crc16_modbus.hpp"
 #include <chrono>
 #include <thread>
-#include "serial_protocol_linux.hpp"
+#include "serial_protocol_echo_linux.hpp"
 
 #endif

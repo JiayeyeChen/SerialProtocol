@@ -12,6 +12,7 @@ set(SRC
     ${CMAKE_CURRENT_LIST_DIR}/Src/main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Src/crc16_modbus.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Src/serial_protocol_linux.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Src/serial_protocol_echo_linux.cpp
 )
 
 set(LIBS
